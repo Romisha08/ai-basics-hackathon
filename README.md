@@ -4,7 +4,7 @@ A small, single-page app that explains slang, internet expressions, abbreviation
 
 ## Live demo
 
-[Decode-the-vibe](https://ai-basics-hackathon-hj6nm4sx4-romisha-biswas-projects.vercel.app?_vercel_share=WN2DsIWhD7dUbTk67zVowysIJi7Dslsq)
+[Decode-the-vibe]()
 
 ## Run locally
 
