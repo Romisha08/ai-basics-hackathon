@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Decode the Vibe — Technical Blueprint</title>
+  <style>
+    :root{--ink:#26243a;--muted:#69677c;--paper:#f8f5f1;--card:#fffdfa;--lav:#e9e2fa;--purple:#7156b5;--coral:#f08b78;--line:#e8e2df;--green:#416d5a}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{max-width:1000px;margin:auto;padding:44px 24px 80px}.eyebrow{text-transform:uppercase;letter-spacing:.14em;color:var(--purple);font-weight:750;font-size:.75rem}
+    h1{font-size:clamp(2.35rem,6vw,4.3rem);line-height:1.06;letter-spacing:-.045em;margin:.45rem 0 1rem}h2{font-size:1.45rem;letter-spacing:-.02em;margin:0 0 14px}h3{font-size:1.05rem;margin:0 0 8px}p{margin:.4rem 0 1rem;color:var(--muted)}strong{color:var(--ink)}a{color:var(--purple)}
+    .intro{max-width:750px;font-size:1.1rem}.pill{display:inline-block;background:var(--lav);color:#55418e;border-radius:99px;padding:5px 12px;font-size:.85rem;font-weight:700;margin:5px 6px 0 0}
+    .section{margin-top:30px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:25px 28px;box-shadow:0 12px 35px #3930440b}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}.step{background:#f5f0fc;border-radius:17px;padding:14px}.step b{display:block;color:var(--purple);font-size:.8rem;margin-bottom:6px}.step span{font-size:.9rem;line-height:1.4;display:block}
+    .diagram{background:#28263d;color:#f9f6ff;border-radius:20px;padding:18px;overflow:auto;margin:18px 0}.diagram svg{width:100%;min-width:650px;height:auto}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.box{border:1px solid var(--line);background:#fff;border-radius:18px;padding:17px}.box p{margin-bottom:0}.callout{border-left:4px solid var(--coral);padding:12px 16px;background:#fff5f1;border-radius:0 14px 14px 0;color:var(--muted)}
+    table{border-collapse:collapse;width:100%;font-size:.94rem}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--purple)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88rem}pre{background:#f4f0ec;border-radius:15px;padding:17px;overflow:auto;color:#39344e}.tag{color:var(--green);font-weight:700}
+    @media(max-width:700px){main{padding:28px 15px 55px}.section{padding:20px 17px;border-radius:19px}.flow{grid-template-columns:1fr}.grid{grid-template-columns:1fr}table{font-size:.85rem}th,td{padding:9px 6px}}
+  </style>
+</head>
+<body><main>
+  <div class="eyebrow">4 — Technical blueprint · Draft for review</div>
+  <h1>Decode the Vibe</h1>
+  <p class="intro">A practical map from the approved product idea to a small working website: what runs in the browser, what needs a server, and how a phrase becomes an audience-aware explanation.</p>
+  <div><span class="pill">HTML · CSS · JavaScript</span><span class="pill">Vite</span><span class="pill">Node.js function</span><span class="pill">Vercel</span><span class="pill">GPT-6 Luna</span></div>
+
+  <section class="section"><h2>The app in plain language</h2><p>The browser handles the page and its cards. When the visitor decodes, a small Node.js function checks the phrase and audience, then asks OpenAI for the explanation. The function keeps the API key private. The page receives only the result and displays it.</p><div class="callout"><strong>Why no Express?</strong> Node.js is the server runtime. Vercel supplies the small backend function; Express would add setup for a single route without helping the first version.</div>
+    <div class="diagram"><svg viewBox="0 0 1000 230" role="img" aria-label="Data flow from browser to Vercel function to OpenAI and back">
+      <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#f08b78"/></marker></defs>
+      <rect x="15" y="42" width="255" height="145" rx="20" fill="#fffdfa"/><text x="38" y="77" fill="#7156b5" font-size="16" font-weight="700">1 · BROWSER PAGE</text><text x="38" y="108" fill="#26243a" font-size="15">Phrase + selected audience</text><text x="38" y="138" fill="#69677c" font-size="13">Validates, shows loading</text><text x="38" y="162" fill="#69677c" font-size="13">Renders cards + copy action</text>
+      <rect x="372" y="42" width="255" height="145" rx="20" fill="#e9e2fa"/><text x="396" y="77" fill="#55418e" font-size="16" font-weight="700">2 · VERCEL FUNCTION</text><text x="396" y="108" fill="#26243a" font-size="15">Checks request again</text><text x="396" y="138" fill="#69677c" font-size="13">Reads private API key</text><text x="396" y="162" fill="#69677c" font-size="13">Makes one model request</text>
+      <rect x="730" y="42" width="255" height="145" rx="20" fill="#fff0eb"/><text x="754" y="77" fill="#aa5445" font-size="16" font-weight="700">3 · OPENAI</text><text x="754" y="108" fill="#26243a" font-size="15">GPT-6 Luna</text><text x="754" y="138" fill="#69677c" font-size="13">Returns structured fields</text><text x="754" y="162" fill="#69677c" font-size="13">Meaning · tone · rewrite · reply</text>
+      <path d="M274 114H358" stroke="#f08b78" stroke-width="4" marker-end="url(#arrow)"/><text x="281" y="100" fill="#fff" font-size="12">JSON input</text><path d="M629 114H716" stroke="#f08b78" stroke-width="4" marker-end="url(#arrow)"/><text x="636" y="100" fill="#fff" font-size="12">private request</text>
+      <path d="M730 202H270" stroke="#bca8ea" stroke-width="3" marker-end="url(#arrow)"/><text x="425" y="222" fill="#ded5f4" font-size="13">Structured result returns to the page</text>
+    </svg></div>
+  </section>
+
+  <section class="section"><h2>What happens when someone decodes</h2><div class="flow">
+    <div class="step"><b>01 · ENTER</b><span>Type or paste up to 500 characters.</span></div><div class="step"><b>02 · CHOOSE</b><span>Select grandparent, parent, student, or coworker.</span></div><div class="step"><b>03 · CHECK</b><span>Blank text or missing audience stops before any AI call.</span></div><div class="step"><b>04 · DECODE</b><span>One server request returns six predictable text fields.</span></div><div class="step"><b>05 · RESPOND</b><span>Read the cards, re-decode for another audience, or copy reply.</span></div>
+  </div></section>
+
+  <section class="section"><h2>Pieces and responsibilities</h2><div class="grid">
+    <div class="box"><h3>One-page interface</h3><p>Phrase box, unselected audience control, field messages, loading, result cards, smooth scroll, and clipboard feedback. A new successful decode replaces the old result.</p><span class="tag">index.html · src/main.js · src/style.css</span></div>
+    <div class="box"><h3>Private decode endpoint</h3><p>Accepts POST JSON only; checks phrase length and allowed audience values; calls OpenAI once; returns a safe result or friendly error.</p><span class="tag">api/decode.js</span></div>
+    <div class="box"><h3>Structured result</h3><p>Meaning, tone, context note, when to use it, audience rewrite, suggested reply. The meaning remains the most prominent card.</p><span class="tag">Transient browser state · no database</span></div>
+    <div class="box"><h3>Warm, responsive design</h3><p>Off-white surface, lavender and coral accents, friendly type, rounded cards, soft shadows, and comfortable mobile spacing.</p><span class="tag">Plain CSS</span></div>
+  </div></section>
+
+  <section class="section"><h2>Technical choices</h2><table><thead><tr><th>Need</th><th>Choice</th><th>Reason</th></tr></thead><tbody>
+    <tr><td>Page and styling</td><td>HTML, CSS, browser JavaScript</td><td>Directly understandable basics; one page does not need a framework.</td></tr><tr><td>Local build</td><td>Vite</td><td>Simple local server and production build.</td></tr><tr><td>Backend</td><td>Vercel Node.js Function</td><td>Keeps the AI key private and handles one endpoint; no Express needed.</td></tr><tr><td>AI</td><td>OpenAI JS SDK · GPT-6 Luna</td><td>Focused decoding with structured output and low listed per-token price.</td></tr><tr><td>Hosting</td><td>Vercel</td><td>Same function setup can run locally and after deployment.</td></tr>
+  </tbody></table></section>
+
+  <section class="section"><h2>Key, cost, and sharing guardrails</h2><p>Keep <code>OPENAI_API_KEY</code> on the server, in an ignored local env file and Vercel environment settings. Do not place it in browser code or a committed file.</p><p>Use a dedicated OpenAI project, a $0.50 hard spend limit, and an alert at $0.40. Limit input to 500 characters, output to 500 tokens, and make no automatic retries. At roughly 600 input / 400 output tokens, current standard pricing estimates about $0.00026 per decode, but real usage varies.</p><div class="callout">Spend caps can take time to reflect usage and may slightly exceed the configured limit. Treat the cap as a guardrail. The deployed URL is not password protected, so share it selectively.</div></section>
+
+  <section class="section"><h2>Failure handling</h2><div class="grid"><div class="box"><h3>Missing input</h3><p>Show the field-specific message. Send no AI request.</p></div><div class="box"><h3>AI is slow or unavailable</h3><p>Stop loading, keep the visitor on the page, and show a helpful error without partial results or automatic retry.</p></div><div class="box"><h3>Ambiguous phrase</h3><p>Explain the likely meaning and make context uncertainty visible.</p></div><div class="box"><h3>Clipboard blocked</h3><p>Say copying failed; leave the suggested reply visible for manual selection.</p></div></div></section>
+
+  <section class="section"><h2>Run and demo path</h2><p>Install Node.js and npm, install project dependencies, set the local OpenAI key, then run <code>npx vercel dev</code>. Open the local URL shown in the terminal. The exact setup commands will be added during the build.</p><p>Demo the same phrase for a grandparent and coworker, show the rewritten wording and copy action, then show validation for a missing input. Build and test locally before deploying. A public GitHub repository and short demo video are also part of the hackathon submission; the optional live URL complements them.</p></section>
+
+  <section class="section"><h2>Decisions clarified</h2><p><strong>Backend question:</strong> A backend is required to protect the API key. Node.js is the runtime, Vercel Function is the backend endpoint, and Express is an optional web framework that is unnecessary for this one-route version.</p><p><strong>Phrase size:</strong> 500 characters is about 70–90 typical English words, though word length varies.</p><p><strong>Open for the build:</strong> confirm exact dependency versions and Vercel function layout early; choose the tagline during visual implementation.</p></section>
+  <p style="text-align:center;margin-top:32px;font-size:.9rem">Draft blueprint · Canonical plan: <a href="spec.md">spec.md</a></p>
+</main></body></html>
