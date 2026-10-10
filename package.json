@@ -1,0 +1,23 @@
+{
+  "name": "decode-the-vibe",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:full": "dotenv -e .env.local -- vercel dev --local --listen 127.0.0.1:3000",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "openai": "^5.20.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.2.0",
+    "dotenv-cli": "^11.0.0",
+    "vercel": "^63.1.2",
+    "vite": "^7.1.12"
+  }
+}

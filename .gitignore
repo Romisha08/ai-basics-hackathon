@@ -1,0 +1,14 @@
+# Personal learning context
+/devpost/learner-profile.md
+
+# Local credentials
+.env
+.env.*
+!.env.example
+
+# Generated app files
+/node_modules/
+/dist/
+/.vercel/
+/.vercel-data/
+/.vercel-config/
