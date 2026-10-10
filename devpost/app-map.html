@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Decode the Vibe — App Map</title>
+  <style>
+    :root { color-scheme: light; --ink:#29253b; --muted:#625e70; --paper:#fbf8f3; --card:#fff; --lav:#eee8ff; --coral:#f27f73; --line:#ded8e7; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:900px; margin:0 auto; padding:36px 20px 64px; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { font-size:clamp(2rem,5vw,3.25rem); line-height:1.1; letter-spacing:-.04em; margin-bottom:12px; }
+    h2 { font-size:1.35rem; margin-bottom:12px; }
+    h3 { font-size:1rem; margin-bottom:6px; }
+    .eyebrow { color:#735bc3; font-size:.75rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
+    .intro { max-width:650px; color:var(--muted); margin-bottom:28px; }
+    section { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; margin:16px 0; box-shadow:0 8px 22px #342b4b0a; }
+    code { background:#f2eef8; border-radius:5px; padding:2px 5px; overflow-wrap:anywhere; }
+    .flow { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px; }
+    .step { border:1px solid var(--line); border-radius:14px; padding:15px; background:#fff; min-width:0; }
+    .step:nth-child(2) { background:var(--lav); }
+    .step:nth-child(3) { background:#fff0ed; }
+    .step p { margin-bottom:0; color:var(--muted); font-size:.92rem; }
+    .route li,.pointers li { margin:10px 0; }
+    .route strong { display:block; }
+    .note { border-left:4px solid var(--coral); padding-left:14px; }
+    footer { color:var(--muted); font-size:.88rem; padding:8px 2px; }
+    a { color:#5a469c; text-underline-offset:3px; }
+    a:focus-visible { outline:3px solid var(--coral); outline-offset:3px; border-radius:3px; }
+    @media (max-width:620px) { main { padding:24px 14px 40px; } section { padding:18px; } .flow { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">A small guide to the code</p>
+    <h1>Decode the Vibe</h1>
+    <p class="intro">A one-page phrase translator. A person enters a confusing phrase, chooses who they are decoding it for, and gets a plain-language meaning, likely tone, tailored rewrite, and copyable reply.</p>
+
+    <section aria-labelledby="flow-title">
+      <h2 id="flow-title">One decode, through the app</h2>
+      <p>The core route is input → server-side AI request → visible result. The API key stays on the server.</p>
+      <div class="flow" aria-label="Phrase and audience go from the page to the API, then return as result cards">
+        <article class="step"><h3>1. Enter</h3><p><code>src/main.jsx</code> — <code>decode(event)</code> checks for a phrase and audience, then posts them to <code>/api/decode</code>.</p></article>
+        <article class="step"><h3>2. Decode</h3><p><code>api/decode.js</code> — the handler validates both values and calls OpenAI with the server-side key.</p></article>
+        <article class="step"><h3>3. Show</h3><p><code>src/main.jsx</code> — the response fills the meaning, tone, rewrite, and reply cards. <code>copyReply()</code> copies the reply.</p></article>
+      </div>
+    </section>
+
+    <section aria-labelledby="route-title">
+      <h2 id="route-title">Reference route through the source</h2>
+      <ol class="route">
+        <li><strong><code>src/main.jsx</code> — <code>async function decode(event)</code></strong>Validates input and audience, manages loading/error state, and sends the request.</li>
+        <li><strong><code>api/decode.js</code> — <code>handler</code> and <code>client.responses.create</code></strong>Checks the request, reads <code>OPENAI_API_KEY</code> on the server, and requests the four structured fields.</li>
+        <li><strong><code>src/main.jsx</code> — <code>{'{result && ('}</code> and <code>copyReply()</code></strong>Renders the cards when a result exists and copies the suggested reply.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="change-title">
+      <h2 id="change-title">To change this, start here</h2>
+      <ul class="pointers">
+        <li>Change the audience labels in the <code>audiences</code> list in <code>src/main.jsx</code>.</li>
+        <li>Change what the AI explains in <code>api/decode.js</code>, in the instructions and <code>resultSchema</code>.</li>
+        <li>Change card wording and layout in the result section of <code>src/main.jsx</code> and styles in <code>src/style.css</code>.</li>
+        <li>Change the local setup instructions in <code>README.md</code>.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="practice-title">
+      <h2 id="practice-title">A practice to reuse</h2>
+      <p class="note">The approved journey in <code>devpost/prd.md</code> describes what a person should experience. The local check followed that journey: decode for two audiences, inspect the four outputs, try missing inputs, and copy a reply. On another project, trace one user action from its acceptance criteria through the code to an observable result.</p>
+      <p>Run locally with <code>npm run dev:full</code> after setting <code>OPENAI_API_KEY</code> in <code>.env.local</code>. Build with <code>npm run build</code>.</p>
+    </section>
+
+    <footer>This offline-friendly map is a snapshot of source commit <code>435c7cc</code>. It can drift as the code changes. No scripts, remote assets, or secrets are required.</footer>
+  </main>
+</body>
+</html>
